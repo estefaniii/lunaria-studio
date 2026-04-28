@@ -1,0 +1,133 @@
+/* ============================================
+   LUNARIA STUDIO — Design Tokens
+   Tema: Cosmic / Lunar / Futuristic
+   ============================================ */
+
+:root {
+  /* Colors — base cósmica */
+  --bg-primary: #06040D;
+  --bg-secondary: #0B0817;
+  --bg-tertiary: #120D26;
+  --bg-elevated: #1A1438;
+
+  /* Surfaces (glassmorphism) */
+  --surface-glass: rgba(255, 255, 255, 0.03);
+  --surface-glass-strong: rgba(255, 255, 255, 0.06);
+  --surface-hover: rgba(167, 139, 250, 0.08);
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(167, 139, 250, 0.30);
+  --border-glow: rgba(167, 139, 250, 0.50);
+
+  /* Brand colors — paleta lunar */
+  --moon: #E8E4F3;
+  --moon-warm: #F5E6C8;
+  --moon-glow: #FCD34D;
+
+  --purple-100: #EDE9FE;
+  --purple-300: #C4B5FD;
+  --purple-400: #A78BFA;
+  --purple-500: #8B5CF6;
+  --purple-600: #7C3AED;
+  --purple-700: #6D28D9;
+
+  --violet-glow: #B89BFF;
+  --pink-glow: #F0ABFC;
+  --cyan-glow: #67E8F9;
+  --rose-glow: #FB7185;
+
+  /* Text */
+  --text-primary: #F4F3FF;
+  --text-secondary: #C4BFDD;
+  --text-muted: #8B86A8;
+  --text-disabled: #5A5570;
+
+  /* Gradients */
+  --gradient-aurora: linear-gradient(135deg, #A78BFA 0%, #F0ABFC 50%, #FCD34D 100%);
+  --gradient-cosmic: linear-gradient(135deg, #6D28D9 0%, #A78BFA 50%, #F0ABFC 100%);
+  --gradient-luna: linear-gradient(135deg, #E8E4F3 0%, #F5E6C8 100%);
+  --gradient-text: linear-gradient(135deg, #F4F3FF 0%, #C4B5FD 50%, #F0ABFC 100%);
+  --gradient-button: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%);
+  --gradient-border: linear-gradient(135deg, rgba(167,139,250,0.4), rgba(240,171,252,0.2), rgba(252,211,77,0.3));
+
+  /* Glows */
+  --glow-purple: 0 0 40px rgba(167, 139, 250, 0.35);
+  --glow-purple-strong: 0 0 80px rgba(167, 139, 250, 0.5);
+  --glow-pink: 0 0 60px rgba(240, 171, 252, 0.4);
+  --glow-moon: 0 0 100px rgba(232, 228, 243, 0.15);
+  --glow-card-hover: 0 20px 60px -15px rgba(167, 139, 250, 0.35);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 24px 80px rgba(0, 0, 0, 0.7);
+
+  /* Typography */
+  --font-display: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+
+  /* Sizes — fluid */
+  --text-xs: clamp(0.72rem, 0.7rem + 0.1vw, 0.78rem);
+  --text-sm: clamp(0.84rem, 0.82rem + 0.12vw, 0.92rem);
+  --text-base: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);
+  --text-md: clamp(1.05rem, 1rem + 0.25vw, 1.18rem);
+  --text-lg: clamp(1.2rem, 1.1rem + 0.5vw, 1.4rem);
+  --text-xl: clamp(1.45rem, 1.25rem + 1vw, 1.85rem);
+  --text-2xl: clamp(1.8rem, 1.5rem + 1.5vw, 2.4rem);
+  --text-3xl: clamp(2.2rem, 1.7rem + 2.5vw, 3.2rem);
+  --text-4xl: clamp(2.8rem, 2rem + 4vw, 4.5rem);
+  --text-5xl: clamp(3.4rem, 2.4rem + 5vw, 5.8rem);
+  --text-hero: clamp(2.8rem, 2rem + 5.5vw, 6.5rem);
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Layout */
+  --container-max: 1280px;
+  --container-narrow: 1100px;
+  --container-wide: 1440px;
+  --content-padding: clamp(1.25rem, 4vw, 2.5rem);
+  --section-padding-y: clamp(4rem, 10vw, 8rem);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-2xl: 36px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast: 150ms var(--ease-out-quart);
+  --transition-base: 250ms var(--ease-out-quart);
+  --transition-slow: 500ms var(--ease-out-expo);
+  --transition-slower: 800ms var(--ease-out-expo);
+
+  /* Z-index */
+  --z-base: 1;
+  --z-content: 10;
+  --z-sticky: 100;
+  --z-nav: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+}
