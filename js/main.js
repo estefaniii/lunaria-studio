@@ -228,6 +228,34 @@
     });
   }
 
+  /* Blog filters — filtra las cards por data-category */
+  const filterButtons = document.querySelectorAll('.blog-filter');
+  const blogCards = document.querySelectorAll('.blog-card[data-category]');
+  if (filterButtons.length && blogCards.length) {
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        // Toggle active state
+        filterButtons.forEach(b => b.classList.toggle('is-active', b === btn));
+        // Filter cards
+        blogCards.forEach(card => {
+          const cat = card.dataset.category;
+          const match = filter === 'all' || cat === filter;
+          card.classList.toggle('is-hidden', !match);
+        });
+        // Smooth fade-in for visible cards
+        requestAnimationFrame(() => {
+          blogCards.forEach((card, i) => {
+            if (!card.classList.contains('is-hidden')) {
+              card.classList.add('is-fading');
+              setTimeout(() => card.classList.remove('is-fading'), 50 + i * 40);
+            }
+          });
+        });
+      });
+    });
+  }
+
   /* Newsletter form (blog) — same simple feedback */
   const newsletter = document.querySelector('form[data-newsletter]');
   if (newsletter) {

@@ -1831,7 +1831,56 @@ section { padding-block: var(--section-padding-y); }
 .article-meta-top .sep { color: var(--text-muted); }
 .article-title { max-width: 22ch; margin: 0 auto var(--space-6); }
 .article-author { display: inline-flex; align-items: center; gap: var(--space-3); margin-top: var(--space-4); color: var(--text-secondary); font-size: var(--text-sm); }
-.article-author-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gradient-aurora); border: 1.5px solid var(--border-glow); object-fit: cover; }
+.article-author-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--gradient-aurora); border: 1.5px solid var(--border-glow); object-fit: cover; flex-shrink: 0; box-shadow: 0 4px 16px -4px rgba(167, 139, 250, 0.4); }
+img.article-author-avatar { display: block; }
+img.article-author-avatar[src=""], img.article-author-avatar:not([src]) { background: var(--gradient-aurora); }
+
+/* ============================================
+   BLOG FILTERS
+   ============================================ */
+.blog-filters {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-12);
+}
+.blog-filter {
+  padding: var(--space-2) var(--space-5);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--surface-glass-strong);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  white-space: nowrap;
+}
+.blog-filter:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  background: var(--surface-hover);
+}
+.blog-filter.is-active {
+  background: var(--gradient-button);
+  color: var(--text-primary);
+  border-color: var(--purple-400);
+  box-shadow: var(--glow-purple);
+}
+
+/* When filtering, hide/show cards */
+.blog-card.is-hidden {
+  display: none;
+}
+.blog-card { transition: opacity var(--transition-base), transform var(--transition-base); }
+.blog-card.is-fading {
+  opacity: 0;
+  transform: scale(0.96);
+}
 
 .article-cover {
   max-width: var(--container-narrow);
