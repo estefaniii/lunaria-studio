@@ -1842,42 +1842,47 @@ img.article-author-avatar[src=""], img.article-author-avatar:not([src]) { backgr
    FORM STATUS (success / error / loading)
    ============================================ */
 .form-status {
-  margin-top: var(--space-2);
-  padding: var(--space-4) var(--space-5);
-  border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  line-height: 1.5;
-  border: 1px solid transparent;
-  animation: statusFadeIn 400ms var(--ease-out-expo);
+  margin-top: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  border: 1.5px solid transparent;
+  animation: statusFadeIn 500ms var(--ease-out-expo);
+  scroll-margin-top: 100px;
 }
 .form-status[hidden] { display: none; }
-.form-status a { font-weight: 500; border-bottom: 1px dashed currentColor; }
+.form-status a { font-weight: 500; border-bottom: 1px dashed currentColor; color: var(--purple-300); }
+.form-status a:hover { color: var(--moon); }
 
 .form-status--success {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(232, 228, 243, 0.05));
-  border-color: var(--border-glow);
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.20), rgba(232, 228, 243, 0.08));
+  border-color: var(--purple-400);
   color: var(--text-primary);
-  box-shadow: 0 8px 32px -8px rgba(167, 139, 250, 0.4);
+  box-shadow: 0 12px 48px -8px rgba(167, 139, 250, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 .form-status--success strong {
   color: var(--moon);
   font-family: var(--font-display);
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.01em;
 }
 
 .form-status--error {
-  background: linear-gradient(135deg, rgba(251, 113, 133, 0.10), rgba(240, 171, 252, 0.04));
-  border-color: rgba(251, 113, 133, 0.4);
+  background: linear-gradient(135deg, rgba(251, 113, 133, 0.18), rgba(240, 171, 252, 0.08));
+  border-color: rgba(251, 113, 133, 0.5);
   color: var(--text-primary);
+  box-shadow: 0 12px 48px -8px rgba(251, 113, 133, 0.35);
 }
 .form-status--error strong {
   color: var(--rose-glow);
   font-family: var(--font-display);
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: var(--space-2);
+  letter-spacing: -0.01em;
 }
 
 .form-status--loading {

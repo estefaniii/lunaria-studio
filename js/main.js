@@ -221,11 +221,25 @@
     const formStatus = document.getElementById('formStatus');
     const submitBtn = contactForm.querySelector('button[type="submit"]');
 
-    const setStatus = (type, msg) => {
+    const setStatus = (type, msg, doScroll = false) => {
       if (!formStatus) return;
       formStatus.hidden = false;
       formStatus.className = `form-status form-status--${type}`;
       formStatus.innerHTML = msg;
+
+      // Scroll inmediato al mensaje — garantizado en todos los browsers.
+      // Múltiples intentos por si alguno falla (algunos browsers son quisquillosos).
+      if (doScroll) {
+        const doScrollNow = () => {
+          const rect = formStatus.getBoundingClientRect();
+          const targetY = window.scrollY + rect.top - 120;
+          window.scrollTo(0, targetY);                 // instantáneo (siempre funciona)
+          formStatus.scrollIntoView({ block: 'center' }); // respaldo
+        };
+        doScrollNow();
+        requestAnimationFrame(doScrollNow);   // segundo intento tras paint
+        setTimeout(doScrollNow, 100);         // tercer intento si el segundo falló
+      }
     };
 
     const resetButton = () => {
@@ -306,30 +320,34 @@
         const needsActivation = (result.message || '').toLowerCase().includes('activation');
 
         if (isSuccess) {
-          // Email enviado correctamente
+          // Email enviado correctamente — solo aquí limpiamos el form
           setStatus('success',
             '<strong>✓ ¡Mensaje enviado!</strong>' +
-            'Te respondo personalmente en menos de 24 horas. Si es urgente: ' +
-            '<a href="https://wa.me/50767782931" target="_blank" rel="noopener">+507 6778-2931</a>'
+            'Gracias por escribirme. Te respondo personalmente en menos de 24 horas. ' +
+            'Si es urgente, escríbeme al <a href="https://wa.me/50767782931" target="_blank" rel="noopener">+507 6778-2931</a>.',
+            true /* scroll into view */
           );
           contactForm.reset();
         } else if (needsActivation) {
-          // Caso especial: form aún no activado por la dueña.
-          // Damos al usuario una vía alternativa garantizada.
+          // Form aún no activado por la dueña — mostrar alternativa, MANTENER datos
           setStatus('error',
-            '<strong>⚠ El formulario está en mantenimiento.</strong>' +
-            'Por favor escríbenos directamente — te respondo igual de rápido:<br>' +
+            '<strong>⚠ Hubo un problema al enviar.</strong>' +
+            'No te preocupes — escríbeme directamente y te respondo igual de rápido:<br>' +
             '📧 <a href="mailto:estefanidelosangelestorres@gmail.com">estefanidelosangelestorres@gmail.com</a><br>' +
-            '📱 <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>'
+            '📱 <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>',
+            true
           );
         } else {
           throw new Error(result.message || 'Respuesta no exitosa');
         }
       } catch (err) {
+        // Error genérico — MANTENER los datos del usuario
         setStatus('error',
           '<strong>⚠ No se pudo enviar automáticamente.</strong>' +
-          'Escríbenos directamente a <a href="mailto:estefanidelosangelestorres@gmail.com">estefanidelosangelestorres@gmail.com</a> ' +
-          'o por <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>'
+          'Escríbeme directo a <a href="mailto:estefanidelosangelestorres@gmail.com">estefanidelosangelestorres@gmail.com</a> ' +
+          'o por <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>.<br>' +
+          'Tus datos siguen aquí, no los pierdes.',
+          true
         );
       } finally {
         resetButton();
