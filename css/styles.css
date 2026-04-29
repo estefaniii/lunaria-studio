@@ -313,8 +313,23 @@ section { padding-block: var(--section-padding-y); }
   transition: opacity var(--transition-base);
 }
 .nav-mobile.is-open { opacity: 1; pointer-events: auto; }
-.nav-mobile a { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--text-primary); font-weight: 500; }
+.nav-mobile a { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--text-primary); font-weight: 500; text-align: center; }
 .nav-mobile a:hover { color: var(--purple-300); }
+/* Botón CTA dentro del menú móvil — no debe heredar el font-size grande del a, ni desbordar */
+.nav-mobile a.btn {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: var(--space-3) var(--space-6);
+  width: auto;
+  max-width: 280px;
+  margin-top: var(--space-4);
+}
+@media (max-width: 480px) {
+  .nav-mobile { padding: var(--space-8) var(--space-6); gap: var(--space-5); }
+  .nav-mobile a { font-size: var(--text-xl); }
+  .nav-mobile a.btn { font-size: var(--text-sm); width: 100%; max-width: 260px; }
+}
 
 /* ============================================
    BUTTONS

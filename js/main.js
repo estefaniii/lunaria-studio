@@ -214,17 +214,92 @@
     });
   }
 
-  /* Form submit — uses Formsubmit.co (action attribute) so the form posts directly.
-     Light-touch enhancement: disable button + show "Enviando..." while submitting. */
-  const form = document.querySelector('.contact-form[action]');
-  if (form) {
-    form.addEventListener('submit', () => {
-      const btn = form.querySelector('button[type="submit"]');
+  /* Form de contacto — usa mailto: para abrir el cliente de email del usuario.
+     100% gratis, sin servicios externos, sin activaciones, sin tokens. */
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Honeypot anti-spam: si está lleno, ignorar (es un bot)
+      if (contactForm._honey && contactForm._honey.value) return;
+
+      const data = new FormData(contactForm);
+      const get = k => (data.get(k) || '').toString().trim();
+
+      const name    = get('name');
+      const email   = get('email');
+      const company = get('company');
+      const phone   = get('phone');
+      const service = get('service');
+      const budget  = get('budget');
+      const message = get('message');
+
+      // Validación mínima
+      if (!name || !email || !service || !message) {
+        const btn = contactForm.querySelector('button[type="submit"]');
+        if (btn) {
+          btn.style.borderColor = 'var(--rose-glow)';
+          btn.innerText = 'Completa los campos requeridos';
+          setTimeout(() => { btn.style.borderColor = ''; btn.innerHTML = 'Enviar mensaje <span class="arrow" aria-hidden="true">→</span>'; }, 2400);
+        }
+        return;
+      }
+
+      // Mapeo de etiquetas humanas para el email
+      const services = {
+        web: 'Diseño Web', branding: 'Branding', gestion: 'Gestión Digital',
+        ecosistema: 'Ecosistema completo (los 3)', custom: 'Proyecto custom',
+        consulta: 'Solo quiero conversar'
+      };
+      const budgets = {
+        'lt-500': 'Menos de $500', '500-1000': '$500 - $1,000',
+        '1000-2500': '$1,000 - $2,500', '2500-5000': '$2,500 - $5,000',
+        'gt-5000': 'Más de $5,000', 'recurring': 'Servicio mensual'
+      };
+
+      const subject = `Nuevo lead desde lunariastudio.com — ${name}`;
+      const body =
+`Hola Estéfani,
+
+Me llamo ${name}${company ? ` y represento a ${company}` : ''}.
+
+Datos de contacto
+─────────────────
+Email: ${email}
+${phone ? `WhatsApp: ${phone}\n` : ''}
+Mi proyecto
+───────────
+Servicio de interés: ${services[service] || service}
+${budget ? `Presupuesto estimado: ${budgets[budget] || budget}\n` : ''}
+Mensaje
+───────
+${message}
+
+— Enviado desde el formulario de Lunaria Studio`;
+
+      const mailtoUrl = `mailto:estefanidelosangelestorres@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+      // UI feedback
+      const btn = contactForm.querySelector('button[type="submit"]');
       if (btn) {
         btn.disabled = true;
-        btn.style.opacity = '0.7';
-        btn.innerHTML = 'Enviando... <span class="arrow">✦</span>';
+        btn.style.opacity = '0.85';
+        btn.innerHTML = 'Abriendo tu correo... <span class="arrow">✦</span>';
       }
+
+      // Pequeño delay para que se vea el feedback antes de abrir el cliente de email
+      setTimeout(() => {
+        window.location.href = mailtoUrl;
+        // Restaurar el botón después por si el usuario cancela el envío
+        setTimeout(() => {
+          if (btn) {
+            btn.disabled = false;
+            btn.style.opacity = '';
+            btn.innerHTML = 'Enviar mensaje <span class="arrow" aria-hidden="true">→</span>';
+          }
+        }, 1500);
+      }, 200);
     });
   }
 

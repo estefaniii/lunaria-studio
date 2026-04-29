@@ -140,13 +140,8 @@
             </div>
           </aside>
 
-          <form class="contact-form reveal delay-2" action="https://formsubmit.co/estefanidelosangelestorres@gmail.com" method="POST">
-            <!-- Formsubmit config (free, no signup) -->
-            <input type="hidden" name="_subject" value="✦ Nuevo lead desde Lunariastudio.com" />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_autoresponse" value="¡Hola! Recibimos tu mensaje en Lunaria Studio. Te respondo personalmente en menos de 24 horas con una propuesta a medida. Mientras tanto, si es urgente, escríbeme al +507 6778-2931. — Estéfani Torres, Fundadora" />
-            <input type="hidden" name="_next" value="https://lunariastudio.com/gracias.html" />
+          <form class="contact-form reveal delay-2" id="contactForm" novalidate>
+            <!-- Form 100% gratis sin servicios externos: usa el cliente de email del usuario (mailto) -->
             <!-- Honeypot anti-spam -->
             <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
             <div>
@@ -181,9 +176,9 @@
               <label class="form-label" for="service">Servicio de interés</label>
               <select class="form-select" id="service" name="service" required>
                 <option value="">Selecciona una opción</option>
-                <option value="web">Diseño Web — $800</option>
-                <option value="branding">Branding — $450</option>
-                <option value="gestion">Gestión Digital — $350/mes</option>
+                <option value="web">Diseño Web</option>
+                <option value="branding">Branding</option>
+                <option value="gestion">Gestión Digital</option>
                 <option value="ecosistema">Ecosistema completo (los 3)</option>
                 <option value="custom">Proyecto custom</option>
                 <option value="consulta">Solo quiero conversar</option>
