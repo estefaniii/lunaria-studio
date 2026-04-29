@@ -29,6 +29,18 @@
       navToggle.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     };
+
+    // Inyectar botón "X" para cerrar el menú móvil (esquina superior derecha)
+    if (!navMobile.querySelector('.nav-mobile-close')) {
+      const closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'nav-mobile-close';
+      closeBtn.setAttribute('aria-label', 'Cerrar menú');
+      closeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+      closeBtn.addEventListener('click', closeMenu);
+      navMobile.insertBefore(closeBtn, navMobile.firstChild);
+    }
+
     navToggle.addEventListener('click', () => {
       const isOpen = navMobile.classList.toggle('is-open');
       navToggle.classList.toggle('is-open', isOpen);
