@@ -1839,6 +1839,72 @@ img.article-author-avatar { display: block; }
 img.article-author-avatar[src=""], img.article-author-avatar:not([src]) { background: var(--gradient-aurora); }
 
 /* ============================================
+   FORM STATUS (success / error / loading)
+   ============================================ */
+.form-status {
+  margin-top: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  border: 1px solid transparent;
+  animation: statusFadeIn 400ms var(--ease-out-expo);
+}
+.form-status[hidden] { display: none; }
+.form-status a { font-weight: 500; border-bottom: 1px dashed currentColor; }
+
+.form-status--success {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(232, 228, 243, 0.05));
+  border-color: var(--border-glow);
+  color: var(--text-primary);
+  box-shadow: 0 8px 32px -8px rgba(167, 139, 250, 0.4);
+}
+.form-status--success strong {
+  color: var(--moon);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.form-status--error {
+  background: linear-gradient(135deg, rgba(251, 113, 133, 0.10), rgba(240, 171, 252, 0.04));
+  border-color: rgba(251, 113, 133, 0.4);
+  color: var(--text-primary);
+}
+.form-status--error strong {
+  color: var(--rose-glow);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.form-status--loading {
+  background: var(--surface-glass-strong);
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+  display: flex; align-items: center; gap: var(--space-3);
+}
+.form-status-spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(167, 139, 250, 0.25);
+  border-top-color: var(--purple-400);
+  border-radius: 50%;
+  animation: statusSpin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes statusFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes statusSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
    BLOG FILTERS
    ============================================ */
 .blog-filters {

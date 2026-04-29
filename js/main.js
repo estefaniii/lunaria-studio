@@ -214,15 +214,34 @@
     });
   }
 
-  /* Form de contacto — usa mailto: para abrir el cliente de email del usuario.
-     100% gratis, sin servicios externos, sin activaciones, sin tokens. */
+  /* Form de contacto — fetch al endpoint AJAX de Formsubmit (gratis, sin redirects).
+     El email llega DIRECTO a estefanidelosangelestorres@gmail.com sin que el usuario salga del sitio. */
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    const formStatus = document.getElementById('formStatus');
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+    const setStatus = (type, msg) => {
+      if (!formStatus) return;
+      formStatus.hidden = false;
+      formStatus.className = `form-status form-status--${type}`;
+      formStatus.innerHTML = msg;
+    };
+
+    const resetButton = () => {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '';
+        submitBtn.innerHTML = 'Enviar mensaje <span class="arrow" aria-hidden="true">→</span>';
+      }
+    };
+
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Honeypot anti-spam: si está lleno, ignorar (es un bot)
-      if (contactForm._honey && contactForm._honey.value) return;
+      // Honeypot anti-spam
+      const honey = contactForm.querySelector('[name="_honey"]');
+      if (honey && honey.value) return;
 
       const data = new FormData(contactForm);
       const get = k => (data.get(k) || '').toString().trim();
@@ -235,18 +254,13 @@
       const budget  = get('budget');
       const message = get('message');
 
-      // Validación mínima
+      // Validación
       if (!name || !email || !service || !message) {
-        const btn = contactForm.querySelector('button[type="submit"]');
-        if (btn) {
-          btn.style.borderColor = 'var(--rose-glow)';
-          btn.innerText = 'Completa los campos requeridos';
-          setTimeout(() => { btn.style.borderColor = ''; btn.innerHTML = 'Enviar mensaje <span class="arrow" aria-hidden="true">→</span>'; }, 2400);
-        }
+        setStatus('error', '⚠ Completa los campos: nombre, email, servicio y mensaje.');
         return;
       }
 
-      // Mapeo de etiquetas humanas para el email
+      // Mapeo legible
       const services = {
         web: 'Diseño Web', branding: 'Branding', gestion: 'Gestión Digital',
         ecosistema: 'Ecosistema completo (los 3)', custom: 'Proyecto custom',
@@ -258,104 +272,69 @@
         'gt-5000': 'Más de $5,000', 'recurring': 'Servicio mensual'
       };
 
-      const subject = `Nuevo lead desde lunariastudio.com — ${name}`;
-      const body =
-`Hola Estéfani,
-
-Me llamo ${name}${company ? ` y represento a ${company}` : ''}.
-
-Datos de contacto
-─────────────────
-Email: ${email}
-${phone ? `WhatsApp: ${phone}\n` : ''}
-Mi proyecto
-───────────
-Servicio de interés: ${services[service] || service}
-${budget ? `Presupuesto estimado: ${budgets[budget] || budget}\n` : ''}
-Mensaje
-───────
-${message}
-
-— Enviado desde el formulario de Lunaria Studio`;
-
-      const mailtoUrl = `mailto:estefanidelosangelestorres@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-      // UI feedback
-      const btn = contactForm.querySelector('button[type="submit"]');
-      if (btn) {
-        btn.disabled = true;
-        btn.style.opacity = '0.85';
-        btn.innerHTML = 'Abriendo tu correo... <span class="arrow">✦</span>';
+      // Estado: enviando
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.85';
+        submitBtn.innerHTML = 'Enviando... ✦';
       }
+      setStatus('loading', '<span class="form-status-spinner"></span> Enviando tu mensaje a Estéfani...');
 
-      // Pequeño delay para que se vea el feedback antes de abrir el cliente de email
-      setTimeout(() => {
-        window.location.href = mailtoUrl;
-        // Restaurar el botón después por si el usuario cancela el envío
-        setTimeout(() => {
-          if (btn) {
-            btn.disabled = false;
-            btn.style.opacity = '';
-            btn.innerHTML = 'Enviar por email <span class="arrow" aria-hidden="true">→</span>';
-          }
-        }, 1500);
-      }, 200);
-    });
+      try {
+        const res = await fetch('https://formsubmit.co/ajax/estefanidelosangelestorres@gmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            'Nombre': name,
+            'Email': email,
+            'Empresa': company || '—',
+            'WhatsApp': phone || '—',
+            'Servicio de interés': services[service] || service,
+            'Presupuesto estimado': budgets[budget] || (budget || '—'),
+            'Mensaje': message,
+            _subject: `✦ Nuevo lead Lunaria · ${name}`,
+            _template: 'table',
+            _captcha: 'false'
+          })
+        });
 
-    /* Botón WhatsApp: arma el mensaje con los mismos campos del form y abre wa.me */
-    const waBtn = document.getElementById('sendWhatsAppBtn');
-    if (waBtn) {
-      waBtn.addEventListener('click', () => {
-        const data = new FormData(contactForm);
-        const get = k => (data.get(k) || '').toString().trim();
+        const result = await res.json().catch(() => ({}));
+        const isSuccess = res.ok && (result.success === 'true' || result.success === true);
+        const needsActivation = (result.message || '').toLowerCase().includes('activation');
 
-        const name    = get('name');
-        const email   = get('email');
-        const company = get('company');
-        const phone   = get('phone');
-        const service = get('service');
-        const budget  = get('budget');
-        const message = get('message');
-
-        if (!name || !service || !message) {
-          waBtn.style.outline = '2px solid var(--rose-glow)';
-          const orig = waBtn.innerHTML;
-          waBtn.innerHTML = 'Completa nombre, servicio y mensaje';
-          setTimeout(() => { waBtn.style.outline = ''; waBtn.innerHTML = orig; }, 2400);
-          return;
+        if (isSuccess) {
+          // Email enviado correctamente
+          setStatus('success',
+            '<strong>✓ ¡Mensaje enviado!</strong>' +
+            'Te respondo personalmente en menos de 24 horas. Si es urgente: ' +
+            '<a href="https://wa.me/50767782931" target="_blank" rel="noopener">+507 6778-2931</a>'
+          );
+          contactForm.reset();
+        } else if (needsActivation) {
+          // Caso especial: form aún no activado por la dueña.
+          // Damos al usuario una vía alternativa garantizada.
+          setStatus('error',
+            '<strong>⚠ El formulario está en mantenimiento.</strong>' +
+            'Por favor escríbenos directamente — te respondo igual de rápido:<br>' +
+            '📧 <a href="mailto:estefanidelosangelestorres@gmail.com">estefanidelosangelestorres@gmail.com</a><br>' +
+            '📱 <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>'
+          );
+        } else {
+          throw new Error(result.message || 'Respuesta no exitosa');
         }
-
-        const services = {
-          web: 'Diseño Web', branding: 'Branding', gestion: 'Gestión Digital',
-          ecosistema: 'Ecosistema completo (los 3)', custom: 'Proyecto custom',
-          consulta: 'Solo quiero conversar'
-        };
-        const budgets = {
-          'lt-500': 'Menos de $500', '500-1000': '$500 - $1,000',
-          '1000-2500': '$1,000 - $2,500', '2500-5000': '$2,500 - $5,000',
-          'gt-5000': 'Más de $5,000', 'recurring': 'Servicio mensual'
-        };
-
-        const txt =
-`✦ Hola Estéfani, vengo del sitio de Lunaria.
-
-Me llamo *${name}*${company ? ` (de ${company})` : ''}.
-${email ? `📧 ${email}` : ''}${phone ? `\n📱 ${phone}` : ''}
-
-🎯 Servicio de interés: *${services[service] || service}*${budget ? `\n💰 Presupuesto: ${budgets[budget] || budget}` : ''}
-
-💬 Mensaje:
-${message}`;
-
-        const waUrl = `https://wa.me/50767782931?text=${encodeURIComponent(txt)}`;
-
-        const orig = waBtn.innerHTML;
-        waBtn.style.opacity = '0.85';
-        waBtn.innerHTML = 'Abriendo WhatsApp... ✦';
-        window.open(waUrl, '_blank', 'noopener');
-        setTimeout(() => { waBtn.style.opacity = ''; waBtn.innerHTML = orig; }, 1500);
-      });
-    }
+      } catch (err) {
+        setStatus('error',
+          '<strong>⚠ No se pudo enviar automáticamente.</strong>' +
+          'Escríbenos directamente a <a href="mailto:estefanidelosangelestorres@gmail.com">estefanidelosangelestorres@gmail.com</a> ' +
+          'o por <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>'
+        );
+      } finally {
+        resetButton();
+      }
+    });
   }
 
   /* Blog filters — filtra las cards por data-category */
