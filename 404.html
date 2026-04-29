@@ -4,13 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#06040D" />
-  <title>404 — Te perdiste en órbita | Lunaria Studio</title>
-  <meta name="description" content="La página que buscas no existe en nuestra galaxia. Volvamos al inicio." />
-  <meta name="robots" content="noindex" />
+  <title>404 · Esta luna no está en órbita — Lunaria Studio</title>
+  <meta name="description" content="La página que buscas se perdió en el cosmos. Volvamos a tierra firme — la luna siempre encuentra el camino de vuelta." />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="author" content="Estéfani Torres" />
+  <link rel="canonical" href="https://lunariastudio.com/404.html" />
+  <meta property="og:title" content="404 · Te perdiste en órbita — Lunaria Studio" />
+  <meta property="og:description" content="La página que buscas se perdió en el cosmos. Volvamos a tierra firme." />
+  <meta property="og:image" content="https://lunariastudio.com/images/og-default.jpg" />
+  <meta property="og:url" content="https://lunariastudio.com/404.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_PA" />
+  <meta property="og:site_name" content="Lunaria Studio" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="404 · Te perdiste en órbita — Lunaria Studio" />
+  <meta name="twitter:description" content="La página que buscas se perdió en el cosmos. Volvamos a tierra firme." />
+  <meta name="twitter:image" content="https://lunariastudio.com/images/og-default.jpg" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='moon' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23E8E4F3'/%3E%3Cstop offset='100%25' stop-color='%23F5E6C8'/%3E%3C/linearGradient%3E%3CradialGradient id='shadow' cx='75%25' cy='75%25' r='65%25'%3E%3Cstop offset='0%25' stop-color='%237C3AED' stop-opacity='0.45'/%3E%3Cstop offset='100%25' stop-color='%237C3AED' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='url(%23moon)'/%3E%3Ccircle cx='16' cy='16' r='14' fill='url(%23shadow)'/%3E%3Ccircle cx='10.5' cy='12' r='1.8' fill='%237C3AED' fill-opacity='0.28'/%3E%3Ccircle cx='17' cy='13.5' r='1.2' fill='%237C3AED' fill-opacity='0.22'/%3E%3Ccircle cx='13' cy='19' r='1' fill='%237C3AED' fill-opacity='0.20'/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/styles.css" />
   <style>
+    /* ============================================
+       404 — Eclipse Lunar
+       ============================================ */
+    body { overflow-x: hidden; }
+
     .e404 {
       min-height: 100vh;
       display: flex;
@@ -18,93 +36,457 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: var(--space-12) var(--content-padding);
+      padding: 120px var(--content-padding) var(--space-12);
       position: relative;
-      overflow: hidden;
+      isolation: isolate;
     }
-    .e404-orbs {
-      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+
+    /* Cosmic backdrop */
+    .e404-orbs { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .e404-orbs .orb { position: absolute; border-radius: 50%; filter: blur(100px); will-change: transform; }
+    .e404-orbs .orb-1 { width: 700px; height: 700px; background: radial-gradient(circle, #7C3AED, transparent 70%); top: -15%; left: -15%; opacity: 0.55; animation: orbFloat1 14s ease-in-out infinite; }
+    .e404-orbs .orb-2 { width: 600px; height: 600px; background: radial-gradient(circle, #F0ABFC, transparent 70%); bottom: -20%; right: -10%; opacity: 0.4; animation: orbFloat2 18s ease-in-out infinite; }
+    .e404-orbs .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #FCD34D, transparent 70%); top: 60%; left: 40%; opacity: 0.18; animation: orbFloat3 22s ease-in-out infinite; }
+
+    /* Star field with twinkling */
+    .e404-stars {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
     }
-    .e404-orbs .orb { position: absolute; border-radius: 50%; filter: blur(80px); }
-    .e404-orbs .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #7C3AED, transparent 70%); top: -10%; left: -10%; opacity: 0.5; animation: orbFloat1 14s ease-in-out infinite; }
-    .e404-orbs .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #F0ABFC, transparent 70%); bottom: -10%; right: -10%; opacity: 0.4; animation: orbFloat2 16s ease-in-out infinite; }
-    .e404-content { position: relative; z-index: 1; max-width: 700px; }
-    .e404-number {
+    .e404-stars .star {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 4px rgba(255,255,255,0.6);
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    /* Shooting stars */
+    .e404-stars::before, .e404-stars::after {
+      content: '';
+      position: absolute;
+      width: 2px; height: 2px;
+      background: linear-gradient(45deg, #fff, transparent);
+      border-radius: 50%;
+      box-shadow: 0 0 6px #fff, 0 0 16px rgba(167, 139, 250, 0.6);
+    }
+    .e404-stars::before {
+      top: 20%; left: -10%;
+      animation: shootingStar 8s linear infinite;
+    }
+    .e404-stars::after {
+      top: 60%; left: -10%;
+      animation: shootingStar 11s 4s linear infinite;
+    }
+    @keyframes shootingStar {
+      0% { transform: translateX(0) translateY(0); opacity: 0; }
+      5% { opacity: 1; }
+      40% { opacity: 1; }
+      60% { transform: translateX(120vw) translateY(20vh); opacity: 0; }
+      100% { transform: translateX(120vw) translateY(20vh); opacity: 0; }
+    }
+
+    .e404-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Eyebrow */
+    .e404-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--purple-300);
+      background: var(--surface-glass-strong);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      margin-bottom: var(--space-8);
+    }
+    .e404-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--purple-400);
+      box-shadow: 0 0 10px var(--purple-400);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* The main eclipse: 4 [moon] 4 */
+    .e404-eclipse {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(0.5rem, 2vw, 2rem);
+      margin-bottom: var(--space-8);
+      position: relative;
+    }
+    .e404-digit {
       font-family: var(--font-display);
-      font-size: clamp(8rem, 6rem + 12vw, 18rem);
+      font-size: clamp(7rem, 4rem + 18vw, 18rem);
       font-weight: 400;
       letter-spacing: -0.06em;
       line-height: 0.85;
-      background: var(--gradient-aurora);
+      background: linear-gradient(180deg, #F4F3FF 0%, #C4B5FD 60%, rgba(196,181,253,0.3) 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
       color: transparent;
-      margin: 0;
-      filter: drop-shadow(0 0 40px rgba(167, 139, 250, 0.3));
+      filter: drop-shadow(0 0 60px rgba(167, 139, 250, 0.45));
+      user-select: none;
     }
-    .e404-moon {
-      width: clamp(80px, 14vw, 140px);
+
+    /* The moon (the "0" of 404) */
+    .e404-moon-wrap {
+      position: relative;
+      width: clamp(7rem, 4rem + 18vw, 18rem);
       aspect-ratio: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Orbital rings around the moon */
+    .e404-orbit {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px dashed rgba(167, 139, 250, 0.25);
+      pointer-events: none;
+    }
+    .e404-orbit-1 {
+      width: 130%; aspect-ratio: 1;
+      animation: orbitSpin 18s linear infinite;
+    }
+    .e404-orbit-2 {
+      width: 160%; aspect-ratio: 1;
+      animation: orbitSpin 28s linear infinite reverse;
+      border-color: rgba(240, 171, 252, 0.2);
+    }
+    .e404-orbit::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0;
+      transform: translate(-50%, -50%);
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--purple-400);
+      box-shadow: 0 0 16px var(--purple-400), 0 0 32px rgba(167, 139, 250, 0.4);
+    }
+    .e404-orbit-2::before {
+      background: var(--pink-glow);
+      box-shadow: 0 0 16px var(--pink-glow), 0 0 32px rgba(240, 171, 252, 0.4);
+      width: 10px; height: 10px;
+    }
+    @keyframes orbitSpin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .e404-moon {
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       background: var(--gradient-luna);
-      margin: var(--space-6) auto;
-      box-shadow: 0 0 80px rgba(232, 228, 243, 0.4), inset -16px -16px 40px rgba(124, 58, 237, 0.4);
       position: relative;
-      animation: floatY 6s ease-in-out infinite;
+      box-shadow:
+        0 0 80px rgba(232, 228, 243, 0.45),
+        0 0 160px rgba(167, 139, 250, 0.3),
+        inset -22px -22px 60px rgba(124, 58, 237, 0.5),
+        inset 12px 12px 30px rgba(255, 255, 255, 0.25);
+      animation: moonFloat 6s ease-in-out infinite, moonRotate 60s linear infinite;
+      overflow: hidden;
     }
-    .e404-moon::before, .e404-moon::after {
+    /* Craters (stars, decorative) */
+    .e404-moon::before,
+    .e404-moon::after {
       content: '';
       position: absolute;
       border-radius: 50%;
       background: rgba(124, 58, 237, 0.18);
     }
-    .e404-moon::before { top: 25%; left: 25%; width: 16%; height: 16%; box-shadow: 26px 12px 0 -2px rgba(124,58,237,0.14); }
-    .e404-moon::after { top: 60%; left: 55%; width: 12%; height: 12%; }
-    @keyframes floatY {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-14px); }
+    .e404-moon::before {
+      top: 22%; left: 22%;
+      width: 14%; height: 14%;
+      box-shadow:
+        90px 28px 0 -3px rgba(124,58,237,0.14),
+        38px 100px 0 -5px rgba(124,58,237,0.10),
+        -10px 60px 0 -2px rgba(124,58,237,0.12);
     }
+    .e404-moon::after {
+      top: 65%; left: 60%;
+      width: 9%; height: 9%;
+      box-shadow:
+        -50px 18px 0 -2px rgba(124,58,237,0.10),
+        18px -50px 0 -3px rgba(124,58,237,0.08);
+    }
+
+    @keyframes moonFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes moonRotate {
+      from { background-position: 0% 0%; }
+      to { background-position: 100% 100%; }
+    }
+
+    /* Title + subtitle */
     .e404-title {
       font-family: var(--font-display);
-      font-size: clamp(1.6rem, 1.2rem + 2vw, 2.6rem);
+      font-size: clamp(1.8rem, 1.3rem + 2.5vw, 3rem);
       font-weight: 400;
       letter-spacing: -0.03em;
-      margin: var(--space-6) 0 var(--space-4);
+      line-height: 1.1;
+      margin: 0 0 var(--space-4);
+      max-width: 22ch;
     }
-    .e404-subtitle { color: var(--text-secondary); font-size: var(--text-md); margin: 0 auto var(--space-10); max-width: 50ch; }
-    .e404-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; }
+    .e404-subtitle {
+      color: var(--text-secondary);
+      font-size: clamp(1rem, 0.95rem + 0.4vw, 1.18rem);
+      line-height: 1.5;
+      margin: 0 auto var(--space-10);
+      max-width: 52ch;
+    }
+    .e404-subtitle .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: var(--purple-300);
+    }
+
+    /* Actions */
+    .e404-actions {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: var(--space-16);
+    }
+
+    /* Secondary nav (rescue links) */
+    .e404-rescue {
+      width: 100%;
+      max-width: 720px;
+      padding: var(--space-6);
+      background: var(--surface-glass);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .e404-rescue-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: var(--space-4);
+    }
+    .e404-rescue-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-3);
+    }
+    .e404-rescue-link {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: var(--space-4);
+      background: var(--surface-glass-strong);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      text-decoration: none;
+      transition: all var(--transition-base);
+      text-align: left;
+    }
+    .e404-rescue-link:hover {
+      border-color: var(--border-glow);
+      background: var(--surface-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px -12px rgba(167, 139, 250, 0.4);
+    }
+    .e404-rescue-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--gradient-button);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: var(--space-2);
+      box-shadow: 0 4px 12px -4px rgba(167, 139, 250, 0.5);
+    }
+    .e404-rescue-icon svg { width: 16px; height: 16px; color: var(--text-primary); }
+    .e404-rescue-name {
+      font-family: var(--font-display);
+      font-size: var(--text-base);
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .e404-rescue-desc {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 720px) {
+      .e404-rescue-grid { grid-template-columns: repeat(2, 1fr); }
+      .e404-actions { flex-direction: column; width: 100%; max-width: 320px; }
+      .e404-actions .btn { width: 100%; }
+    }
+    @media (max-width: 420px) {
+      .e404-rescue-grid { grid-template-columns: 1fr; }
+    }
   </style>
-  <link rel="canonical" href="https://lunariastudio.com/404.html" />
-  <meta name="author" content="Estéfani Torres" />
-  <meta property="og:title" content="Página no encontrada — Lunaria Studio" />
-  <meta property="og:description" content="Esta página se perdió en el cosmos. Vuelve al inicio." />
-  <meta property="og:image" content="https://lunariastudio.com/images/og-default.jpg" />
-  <meta property="og:url" content="https://lunariastudio.com/404.html" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="es_PA" />
-  <meta property="og:site_name" content="Lunaria Studio" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Página no encontrada — Lunaria Studio" />
-  <meta name="twitter:description" content="Esta página se perdió en el cosmos. Vuelve al inicio." />
-  <meta name="twitter:image" content="https://lunariastudio.com/images/og-default.jpg" />
 </head>
 <body>
-  <div class="e404">
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- Minimal nav -->
+  <header class="nav" id="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Lunaria Studio">
+          <span class="nav-logo-mark" aria-hidden="true"></span>
+          <span class="nav-logo-text"><strong>LUNARIA</strong><small>Studio · Panamá</small></span>
+        </a>
+        <nav aria-label="Principal">
+          <ul class="nav-menu">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="servicios.html">Servicios</a></li>
+            <li><a href="nosotros.html">Nosotros</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <a href="contacto.html" class="nav-cta nav-cta-desktop">Empieza tu proyecto<span class="arrow" aria-hidden="true">→</span></a>
+        <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-mobile" id="navMobile" role="dialog" aria-modal="true">
+    <a href="index.html">Inicio</a>
+    <a href="servicios.html">Servicios</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+  </div>
+
+  <main class="e404">
+    <!-- Cosmic backdrop -->
     <div class="e404-orbs" aria-hidden="true">
       <div class="orb orb-1"></div>
       <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
     </div>
+
+    <!-- Twinkling stars + shooting star -->
+    <div class="e404-stars" id="e404Stars" aria-hidden="true"></div>
+
     <div class="e404-content">
-      <div class="e404-moon" aria-hidden="true"></div>
-      <h1 class="e404-number">404</h1>
-      <h2 class="e404-title">Te perdiste <span class="italic-serif text-gradient">en órbita</span></h2>
-      <p class="e404-subtitle">Esta página flotó hacia otra galaxia. Pero tranquila — la luna siempre encuentra el camino de vuelta.</p>
+      <div class="e404-eyebrow">
+        <span>Error 404 · Página fuera de órbita</span>
+      </div>
+
+      <!-- The eclipse: 4 [MOON] 4 -->
+      <div class="e404-eclipse" aria-label="404">
+        <span class="e404-digit" aria-hidden="true">4</span>
+        <div class="e404-moon-wrap" aria-hidden="true">
+          <div class="e404-orbit e404-orbit-1"></div>
+          <div class="e404-orbit e404-orbit-2"></div>
+          <div class="e404-moon"></div>
+        </div>
+        <span class="e404-digit" aria-hidden="true">4</span>
+      </div>
+
+      <h1 class="e404-title">
+        Esta luna se perdió <span class="italic-serif text-gradient">en otra galaxia</span>
+      </h1>
+      <p class="e404-subtitle">
+        La página que buscas no existe en nuestro sistema solar — o se cambió de órbita sin avisarnos. <span class="serif">Tranquila</span>: la luna siempre encuentra el camino de vuelta a casa.
+      </p>
+
       <div class="e404-actions">
-        <a href="index.html" class="btn btn-glow btn-lg">Volver al inicio<span class="arrow">→</span></a>
-        <a href="contacto.html" class="btn btn-ghost btn-lg">Hablemos</a>
+        <a href="index.html" class="btn btn-glow btn-lg">
+          Volver a casa
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="contacto.html" class="btn btn-ghost btn-lg">
+          ¿Necesitas ayuda?
+        </a>
+      </div>
+
+      <!-- Rescue navigation -->
+      <div class="e404-rescue">
+        <div class="e404-rescue-label">O explora otras órbitas</div>
+        <div class="e404-rescue-grid">
+          <a href="servicios.html" class="e404-rescue-link">
+            <div class="e404-rescue-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="e404-rescue-name">Servicios</div>
+            <div class="e404-rescue-desc">Web · Branding · Gestión digital</div>
+          </a>
+          <a href="nosotros.html" class="e404-rescue-link">
+            <div class="e404-rescue-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+            </div>
+            <div class="e404-rescue-name">Nosotros</div>
+            <div class="e404-rescue-desc">Conoce el alma de Lunaria</div>
+          </a>
+          <a href="blog.html" class="e404-rescue-link">
+            <div class="e404-rescue-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <div class="e404-rescue-name">Blog</div>
+            <div class="e404-rescue-desc">Tips de marketing y diseño</div>
+          </a>
+          <a href="contacto.html" class="e404-rescue-link">
+            <div class="e404-rescue-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="e404-rescue-name">Contacto</div>
+            <div class="e404-rescue-desc">Conversemos sobre tu proyecto</div>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
+
+  <script>
+    // Generate twinkling stars
+    (() => {
+      const container = document.getElementById('e404Stars');
+      if (!container) return;
+      const STAR_COUNT = 60;
+      for (let i = 0; i < STAR_COUNT; i++) {
+        const star = document.createElement('span');
+        star.className = 'star';
+        const size = Math.random() < 0.7 ? 2 : (Math.random() < 0.5 ? 1 : 3);
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = (Math.random() * 3) + 's';
+        star.style.animationDuration = (2 + Math.random() * 3) + 's';
+        if (size === 3) star.style.boxShadow = '0 0 8px rgba(255,255,255,0.8), 0 0 16px rgba(167,139,250,0.4)';
+        container.appendChild(star);
+      }
+    })();
+  </script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>
