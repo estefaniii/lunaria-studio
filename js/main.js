@@ -296,11 +296,66 @@ ${message}
           if (btn) {
             btn.disabled = false;
             btn.style.opacity = '';
-            btn.innerHTML = 'Enviar mensaje <span class="arrow" aria-hidden="true">→</span>';
+            btn.innerHTML = 'Enviar por email <span class="arrow" aria-hidden="true">→</span>';
           }
         }, 1500);
       }, 200);
     });
+
+    /* Botón WhatsApp: arma el mensaje con los mismos campos del form y abre wa.me */
+    const waBtn = document.getElementById('sendWhatsAppBtn');
+    if (waBtn) {
+      waBtn.addEventListener('click', () => {
+        const data = new FormData(contactForm);
+        const get = k => (data.get(k) || '').toString().trim();
+
+        const name    = get('name');
+        const email   = get('email');
+        const company = get('company');
+        const phone   = get('phone');
+        const service = get('service');
+        const budget  = get('budget');
+        const message = get('message');
+
+        if (!name || !service || !message) {
+          waBtn.style.outline = '2px solid var(--rose-glow)';
+          const orig = waBtn.innerHTML;
+          waBtn.innerHTML = 'Completa nombre, servicio y mensaje';
+          setTimeout(() => { waBtn.style.outline = ''; waBtn.innerHTML = orig; }, 2400);
+          return;
+        }
+
+        const services = {
+          web: 'Diseño Web', branding: 'Branding', gestion: 'Gestión Digital',
+          ecosistema: 'Ecosistema completo (los 3)', custom: 'Proyecto custom',
+          consulta: 'Solo quiero conversar'
+        };
+        const budgets = {
+          'lt-500': 'Menos de $500', '500-1000': '$500 - $1,000',
+          '1000-2500': '$1,000 - $2,500', '2500-5000': '$2,500 - $5,000',
+          'gt-5000': 'Más de $5,000', 'recurring': 'Servicio mensual'
+        };
+
+        const txt =
+`✦ Hola Estéfani, vengo del sitio de Lunaria.
+
+Me llamo *${name}*${company ? ` (de ${company})` : ''}.
+${email ? `📧 ${email}` : ''}${phone ? `\n📱 ${phone}` : ''}
+
+🎯 Servicio de interés: *${services[service] || service}*${budget ? `\n💰 Presupuesto: ${budgets[budget] || budget}` : ''}
+
+💬 Mensaje:
+${message}`;
+
+        const waUrl = `https://wa.me/50767782931?text=${encodeURIComponent(txt)}`;
+
+        const orig = waBtn.innerHTML;
+        waBtn.style.opacity = '0.85';
+        waBtn.innerHTML = 'Abriendo WhatsApp... ✦';
+        window.open(waUrl, '_blank', 'noopener');
+        setTimeout(() => { waBtn.style.opacity = ''; waBtn.innerHTML = orig; }, 1500);
+      });
+    }
   }
 
   /* Blog filters — filtra las cards por data-category */
