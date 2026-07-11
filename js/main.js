@@ -227,7 +227,7 @@
   }
 
   /* Form de contacto — fetch al endpoint AJAX de Formsubmit (gratis, sin redirects).
-     El email llega DIRECTO a estefanidelosangelestorres@gmail.com sin que el usuario salga del sitio. */
+     El email llega DIRECTO a lunaria.marketing.studio@gmail.com sin que el usuario salga del sitio. */
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
     const formStatus = document.getElementById('formStatus');
@@ -307,7 +307,7 @@
       setStatus('loading', '<span class="form-status-spinner"></span> Enviando tu mensaje a Estéfani...');
 
       try {
-        const res = await fetch('https://formsubmit.co/ajax/estefanidelosangelestorres@gmail.com', {
+        const res = await fetch('https://formsubmit.co/ajax/lunaria.marketing.studio@gmail.com', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -345,7 +345,7 @@
           setStatus('error',
             '<strong>⚠ Hubo un problema al enviar.</strong>' +
             'No te preocupes — escríbeme directamente y te respondo igual de rápido:<br>' +
-            '📧 <a href="mailto:estefanidelosangelestorres@gmail.com">estefanidelosangelestorres@gmail.com</a><br>' +
+            '📧 <a href="mailto:lunaria.marketing.studio@gmail.com">lunaria.marketing.studio@gmail.com</a><br>' +
             '📱 <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>',
             true
           );
@@ -356,7 +356,7 @@
         // Error genérico — MANTENER los datos del usuario
         setStatus('error',
           '<strong>⚠ No se pudo enviar automáticamente.</strong>' +
-          'Escríbeme directo a <a href="mailto:estefanidelosangelestorres@gmail.com">estefanidelosangelestorres@gmail.com</a> ' +
+          'Escríbeme directo a <a href="mailto:lunaria.marketing.studio@gmail.com">lunaria.marketing.studio@gmail.com</a> ' +
           'o por <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>.<br>' +
           'Tus datos siguen aquí, no los pierdes.',
           true
