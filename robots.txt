@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lunariastudio.com/sitemap.xml
+Sitemap: https://lunaria.marketing/sitemap.xml
