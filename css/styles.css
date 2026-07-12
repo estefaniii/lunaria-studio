@@ -2208,3 +2208,36 @@ img.article-author-avatar[src=""], img.article-author-avatar:not([src]) { backgr
 .nav-mobile .lang-switch {
   margin-top: var(--space-2);
 }
+
+
+/* Override nav-menu/nav-mobile default anchor styles so the switch stays compact */
+.nav-menu .lang-switch .lang-opt,
+.nav-mobile .lang-switch .lang-opt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  padding: 5px 9px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: var(--radius-full);
+  transition: color var(--transition-fast);
+}
+
+.nav-menu .lang-switch .lang-opt.lang-active,
+.nav-mobile .lang-switch .lang-opt.lang-active {
+  color: var(--bg-primary);
+  cursor: default;
+}
+
+.nav-menu .lang-switch .lang-opt:not(.lang-active):hover,
+.nav-mobile .lang-switch .lang-opt:not(.lang-active):hover {
+  color: var(--text-primary);
+  background: transparent;
+}
