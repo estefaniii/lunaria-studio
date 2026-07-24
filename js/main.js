@@ -226,148 +226,133 @@
     });
   }
 
-  /* Form de contacto — fetch al endpoint AJAX de Formsubmit (gratis, sin redirects).
-     El email llega DIRECTO a lunaria.marketing.studio@gmail.com sin que el usuario salga del sitio. */
-  const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    const formStatus = document.getElementById('formStatus');
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
+  /* Form de contacto — abre el cliente de correo del usuario (mailto),
+con los datos ordenados por campos. Sin servicios de terceros. */
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+const formStatus = document.getElementById('formStatus');
+const submitBtn = contactForm.querySelector('button[type="submit"]');
 
-    const setStatus = (type, msg, doScroll = false) => {
-      if (!formStatus) return;
-      formStatus.hidden = false;
-      formStatus.className = `form-status form-status--${type}`;
-      formStatus.innerHTML = msg;
+const setStatus = (type, msg, doScroll = false) => {
+if (!formStatus) return;
+formStatus.hidden = false;
+formStatus.className = `form-status form-status--${type}`;
+formStatus.innerHTML = msg;
 
-      // Scroll inmediato al mensaje — garantizado en todos los browsers.
-      // Múltiples intentos por si alguno falla (algunos browsers son quisquillosos).
-      if (doScroll) {
-        const doScrollNow = () => {
-          const rect = formStatus.getBoundingClientRect();
-          const targetY = window.scrollY + rect.top - 120;
-          window.scrollTo(0, targetY);                 // instantáneo (siempre funciona)
-          formStatus.scrollIntoView({ block: 'center' }); // respaldo
-        };
-        doScrollNow();
-        requestAnimationFrame(doScrollNow);   // segundo intento tras paint
-        setTimeout(doScrollNow, 100);         // tercer intento si el segundo falló
-      }
-    };
+if (doScroll) {
+const doScrollNow = () => {
+const rect = formStatus.getBoundingClientRect();
+const targetY = window.scrollY + rect.top - 120;
+window.scrollTo(0, targetY);
+formStatus.scrollIntoView({ block: 'center' });
+};
+doScrollNow();
+requestAnimationFrame(doScrollNow);
+setTimeout(doScrollNow, 100);
+}
+};
 
-    const resetButton = () => {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '';
-        submitBtn.innerHTML = 'Enviar mensaje <span class="arrow" aria-hidden="true">→</span>';
-      }
-    };
+const resetButton = () => {
+if (submitBtn) {
+submitBtn.disabled = false;
+submitBtn.style.opacity = '';
+submitBtn.innerHTML = 'Enviar mensaje <span class="arrow" aria-hidden="true">→</span>';
+}
+};
 
-    contactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+const DEST_EMAIL = 'lunaria.marketing.studio@gmail.com';
 
-      // Honeypot anti-spam
-      const honey = contactForm.querySelector('[name="_honey"]');
-      if (honey && honey.value) return;
+contactForm.addEventListener('submit', (e) => {
+e.preventDefault();
 
-      const data = new FormData(contactForm);
-      const get = k => (data.get(k) || '').toString().trim();
+// Honeypot anti-spam
+const honey = contactForm.querySelector('[name="_honey"]');
+if (honey && honey.value) return;
 
-      const name    = get('name');
-      const email   = get('email');
-      const company = get('company');
-      const phone   = get('phone');
-      const service = get('service');
-      const budget  = get('budget');
-      const message = get('message');
+const data = new FormData(contactForm);
+const get = k => (data.get(k) || '').toString().trim();
 
-      // Validación
-      if (!name || !email || !service || !message) {
-        setStatus('error', '⚠ Completa los campos: nombre, email, servicio y mensaje.');
-        return;
-      }
+const name = get('name');
+const email = get('email');
+const company = get('company');
+const phone = get('phone');
+const service = get('service');
+const budget = get('budget');
+const message = get('message');
 
-      // Mapeo legible
-      const services = {
-        web: 'Diseño Web', branding: 'Branding', gestion: 'Gestión Digital',
-        ecosistema: 'Ecosistema completo (los 3)', custom: 'Proyecto custom',
-        consulta: 'Solo quiero conversar'
-      };
-      const budgets = {
-        'lt-500': 'Menos de $500', '500-1000': '$500 - $1,000',
-        '1000-2500': '$1,000 - $2,500', '2500-5000': '$2,500 - $5,000',
-        'gt-5000': 'Más de $5,000', 'recurring': 'Servicio mensual'
-      };
+// Validación
+if (!name || !email || !service || !message) {
+setStatus('error', '⚠ Completa los campos: nombre, email, servicio y mensaje.');
+return;
+}
 
-      // Estado: enviando
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.85';
-        submitBtn.innerHTML = 'Enviando... ✦';
-      }
-      setStatus('loading', '<span class="form-status-spinner"></span> Enviando tu mensaje a Estéfani...');
+// Mapeo legible
+const services = {
+web: 'Diseño Web', branding: 'Branding', gestion: 'Gestión Digital',
+ecosistema: 'Ecosistema completo (los 3)', custom: 'Proyecto custom',
+consulta: 'Solo quiero conversar'
+};
+const budgets = {
+'lt-500': 'Menos de $500', '500-1000': '$500 - $1,000',
+'1000-2500': '$1,000 - $2,500', '2500-5000': '$2,500 - $5,000',
+'gt-5000': 'Más de $5,000', 'recurring': 'Servicio mensual'
+};
 
-      try {
-        const res = await fetch('https://formsubmit.co/ajax/lunaria.marketing.studio@gmail.com', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            'Nombre': name,
-            'Email': email,
-            'Empresa': company || '—',
-            'WhatsApp': phone || '—',
-            'Servicio de interés': services[service] || service,
-            'Presupuesto estimado': budgets[budget] || (budget || '—'),
-            'Mensaje': message,
-            _subject: `✦ Nuevo lead Lunaria · ${name}`,
-            _template: 'table',
-            _captcha: 'false'
-          })
-        });
+// Cuerpo del correo, ordenado por campos
+const bodyLines = [
+`Nombre: ${name}`,
+`Email: ${email}`,
+`Empresa/Marca: ${company || '—'}`,
+`WhatsApp: ${phone || '—'}`,
+`Servicio de interés: ${services[service] || service}`,
+`Presupuesto estimado: ${budgets[budget] || (budget || '—')}`,
+'',
+'Mensaje:',
+message
+];
+const subject = `✦ Nuevo lead Lunaria · ${name}`;
+const mailtoLink = `mailto:${DEST_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+const mailtoLinkHtml = mailtoLink.replace(/&/g, '&amp;');
 
-        const result = await res.json().catch(() => ({}));
-        const isSuccess = res.ok && (result.success === 'true' || result.success === true);
-        const needsActivation = (result.message || '').toLowerCase().includes('activation');
+if (submitBtn) {
+submitBtn.disabled = true;
+submitBtn.style.opacity = '0.85';
+submitBtn.innerHTML = 'Abriendo tu correo... ✦';
+}
+setStatus('loading', '<span class="form-status-spinner"></span> Abriendo tu programa de correo...');
 
-        if (isSuccess) {
-          // Email enviado correctamente — solo aquí limpiamos el form
-          setStatus('success',
-            '<strong>✓ ¡Mensaje enviado!</strong>' +
-            'Gracias por escribirme. Te respondo personalmente en menos de 24 horas. ' +
-            'Si es urgente, escríbeme al <a href="https://wa.me/50767782931" target="_blank" rel="noopener">+507 6778-2931</a>.',
-            true /* scroll into view */
-          );
-          contactForm.reset();
-        } else if (needsActivation) {
-          // Form aún no activado por la dueña — mostrar alternativa, MANTENER datos
-          setStatus('error',
-            '<strong>⚠ Hubo un problema al enviar.</strong>' +
-            'No te preocupes — escríbeme directamente y te respondo igual de rápido:<br>' +
-            '📧 <a href="mailto:lunaria.marketing.studio@gmail.com">lunaria.marketing.studio@gmail.com</a><br>' +
-            '📱 <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>',
-            true
-          );
-        } else {
-          throw new Error(result.message || 'Respuesta no exitosa');
-        }
-      } catch (err) {
-        // Error genérico — MANTENER los datos del usuario
-        setStatus('error',
-          '<strong>⚠ No se pudo enviar automáticamente.</strong>' +
-          'Escríbeme directo a <a href="mailto:lunaria.marketing.studio@gmail.com">lunaria.marketing.studio@gmail.com</a> ' +
-          'o por <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>.<br>' +
-          'Tus datos siguen aquí, no los pierdes.',
-          true
-        );
-      } finally {
-        resetButton();
-      }
-    });
-  }
+// Heurística: si la pestaña pierde el foco poco después (porque se abrió
+// una app de correo externa), asumimos que el cliente de correo sí abrió.
+let mailClientOpened = false;
+const onBlur = () => { mailClientOpened = true; };
+window.addEventListener('blur', onBlur, { once: true });
 
-  /* Blog filters — filtra las cards por data-category */
+window.location.href = mailtoLink;
+
+setTimeout(() => {
+window.removeEventListener('blur', onBlur);
+if (mailClientOpened) {
+setStatus('success',
+'<strong>✓ Se abrió tu programa de correo</strong>' +
+'con tu mensaje ya redactado y ordenado. Solo dale "Enviar" desde ahí para completarlo. ' +
+'Si prefieres, también puedes escribirme por <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>.',
+true
+);
+} else {
+setStatus('error',
+'<strong>⚠ No pudimos abrir tu programa de correo automáticamente.</strong>' +
+`Escríbeme directo a <a href="${mailtoLinkHtml}">${DEST_EMAIL}</a> ` +
+'o por <a href="https://wa.me/50767782931" target="_blank" rel="noopener">WhatsApp +507 6778-2931</a>.<br>' +
+'Tus datos siguen aquí, no los pierdes.',
+true
+);
+}
+resetButton();
+}, 1200);
+});
+}
+
+/* Blog filters — filtra las cards por data-category */
   const filterButtons = document.querySelectorAll('.blog-filter');
   const blogCards = document.querySelectorAll('.blog-card[data-category]');
   if (filterButtons.length && blogCards.length) {
