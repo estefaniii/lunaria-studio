@@ -161,12 +161,12 @@
           <span class="section-eyebrow">Newsletter Lunaria</span>
           <h2 class="cta-title" style="font-size: clamp(1.6rem, 1.2rem + 2vw, 3rem);">Recibe una idea cada <span class="italic-serif text-gradient">luna nueva</span></h2>
           <p class="cta-subtitle">Una vez al mes. Sin spam. Solo las mejores ideas de neuromarketing y diseño aplicado a negocios panameños que quieren crecer.</p>
-          <form class="contact-form" style="background: transparent; border: none; padding: 0; max-width: 480px; margin: 0 auto;" onsubmit="event.preventDefault(); alert('¡Gracias por suscribirte! Te enviaremos la próxima edición.');">
+          <form class="contact-form" style="background: transparent; border: none; padding: 0; max-width: 480px; margin: 0 auto;" method="POST" action="https://d467ffa2.sibforms.com/serve/MUIFAHp8MnU51p7Zb6obodlQuf8V8f-v0jQ4LEP17UKbpPX2sm4xAwA7OzYjlhVbBQ-X_WLcfiUO5mp5J5ZIdatXUtVOs-TKpq7DucZXqe4SI2NVACSN1Rd5rucbRfrPtiUuNDZms4FZMU-uWtm20IWv03eWIpAPNQ3lSc6F0Q37GrIeKei7QORO-N4sU9lklvD46H7G772XX5KQsQ==">
             <div class="form-row">
-              <input class="form-input" type="email" placeholder="tu@email.com" required style="font-size: var(--text-base);" />
+              <input class="form-input" type="email" name="EMAIL" placeholder="tu@email.com" required style="font-size: var(--text-base);" />
               <button type="submit" class="btn btn-glow">Suscribirme<span class="arrow">→</span></button>
             </div>
-          </form>
+          <input type="text" name="email_address_check" value="" style="display:none;" tabindex="-1" autocomplete="off" /><input type="hidden" name="locale" value="es" /><input type="hidden" name="html_type" value="simple" /></form>
         </div>
       </div>
     </section>
